@@ -9,6 +9,9 @@ const port = process.env.PORT || 5000;
 
 //middle-wares
 app.use(cors());
+// app.use(cors({
+//   origin: 'https://teeny-beds.surge.sh'
+// }));
 app.use(express.json());
 
 
