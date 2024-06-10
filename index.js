@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 require('dotenv').config()
-const { MongoClient, ServerApiVersion , ObjectId } = require("mongodb");
+const { MongoClient, ServerApiVersion  } = require("mongodb");
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -9,9 +9,7 @@ const port = process.env.PORT || 5000;
 
 //middle-wares
 app.use(cors());
-// app.use(cors({
-//   origin: 'https://teeny-beds.surge.sh'
-// }));
+
 app.use(express.json());
 
 
@@ -31,27 +29,20 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const productCollection = client.db('productdb').collection('product');
 
 
-      // app.get('/product/:id', async(req , res)=>{
-      //   const id = req.params.id;
-      //   const query = { _id : new ObjectId(id)};
-      //   const result = await productCollection.findOne(query)
-      //   res.send(result);
-
-      // })
-
 
       app.get('/product/:brand', async(req , res)=>{
+        
         const brand = req.params.brand;
         const query = {brand:brand};
-        // const query = {brand:  new ObjectId(brand)};
+        
         const products = await productCollection.find(query).toArray();
-        // const result = await productCollection.find(query)
-        // const products = await productCollection.find(query)
+        
+       
         const result = {
           brand: brand,
           products: products
@@ -79,7 +70,7 @@ async function run() {
 
 
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
