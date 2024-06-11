@@ -34,6 +34,7 @@ async function run() {
     const productCollection = client.db('newproductdb').collection('newproduct');
 
     const brandCollection = client.db('bname').collection('bname');
+    const cartCollection  = client.db('mobileCartbd').collection('mobileCart');
 
     app.get( '/bname', async(req,res)=>{
      const cursor = brandCollection.find();
@@ -74,7 +75,7 @@ async function run() {
       const id = req.params.id;
       console.log(id);
       const query = { _id: new ObjectId(id)}
-      console.log(query);
+      // console.log(query);
       const result = await productCollection.findOne(query);
       
       res.send( result);
@@ -112,8 +113,28 @@ async function run() {
 
     })
 
+    //  sending data to my cart 
+    app.post('/cart', async(req,res)=>{
+      const addCartProduct = req.body;
+      const addProduct = await cartCollection.insertOne(addCartProduct);
+      res.send(addProduct);
+      // console.log(addProduct);
 
+    });
 
+    // cart data get 
+    app.get('/cart-data', async(req,res)=>{
+      const cartData = cartCollection.find();
+        const cart = await cartData.toArray();
+        res.send(cart);
+    });
+    // delete from cart 
+    app.delete('/cart-data/:id',async(req,res)=>{
+      const id = req.params.id;
+      const query= {_id : new ObjectId(id)}
+      const result = await cartCollection.deleteOne(query);
+      res.send(result);
+    })
 
 
 
