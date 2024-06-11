@@ -78,11 +78,30 @@ async function run() {
       const result = await productCollection.findOne(query);
       
       res.send( result);
-      console.log( 'one id result', result);
+      // console.log( 'one id result', result);
       
     });
       
-
+      //update a product 
+      app.put('/product/:id', async(req,res)=>{
+          const id = req.params.id;
+          const filter = {_id : new ObjectId(id)}
+          const options =   {upsert : true}
+          const updatedProduct = req.body;
+          const product ={
+            $set:{
+              name : updatedProduct.name,
+              photo : updatedProduct.photo   ,
+              rating : updatedProduct.rating,
+              type : updatedProduct.type,
+              description : updatedProduct.description,
+              price : updatedProduct.price,
+              brand : updatedProduct.brand,
+            }
+          }
+          const result = await productCollection.updateOne(filter , product , options);
+          res.send(result);
+      }) 
 
 
     app.post('/product', async(req , res)=>{
